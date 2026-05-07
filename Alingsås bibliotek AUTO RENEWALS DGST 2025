@@ -1,0 +1,48 @@
+Hej [% borrower.firstname %] [% borrower.surname %],
+
+Vi har nu försökt låna om dina böcker. Om ingen ställt sig i kö på det du lånat förnyas lånen upp till tre gånger. Omlånen görs tre dagar innan återlämningsdatum. Lån som ännu inte kan förnyas visas inte nedan.
+
+[% IF error %]
+   Du har  [% error %] titlar som inte kunde lånas om.
+[% END %]
+[% IF success %]
+   Du har [% success %] titlar som lånades om.
+[% END %]
+
+[% FOREACH checkout IN checkouts %]
+         <!-- Hoppa över exemplar om för tidigt för omlån -->
+    [% NEXT IF checkout.auto_renew_error == 'auto_too_soon' %]
+    
+    [% checkout.item.biblio.title %] Streckkod: [% checkout.item.barcode %]
+    
+    [% IF !checkout.auto_renew_error %]
+        <!-- Lyckade omlån -->
+        Nytt återlämningsdatum: [% checkout.date_due | $KohaDates as_due_date => 0%]
+
+    [% ELSIF checkout.auto_renew_error %]
+        <!-- Misslyckade omlån -->
+        [% IF checkout.auto_renew_error == 'too_many' %]
+            Du har uppnått max antal omlån.
+        [% ELSIF checkout.auto_renew_error == 'on_reserve' %]
+            Titeln är reserverad av en annan låntagare.
+        [% ELSIF checkout.auto_renew_error == 'restriction' %]
+            Ditt lånekort är spärrat.
+        [% ELSIF checkout.auto_renew_error == 'overdue' %]
+            Du har lån som är försenade.
+        [% ELSIF checkout.auto_renew_error == 'auto_too_late' %]
+            Det går inte längre att göra ett nytt omlån.
+        [% ELSIF checkout.auto_renew_error == 'auto_too_much_oweing' %]
+            Du har uppnått maxgränsen för avgifter på ditt lånekort.
+        [% ELSIF checkout.auto_renew_error == 'too_unseen' %]
+            Titeln måste lånas om av biblioteket.<br>
+        [% END %]
+Återlämningsdatum: [% checkout.date_due | $KohaDates as_due_date => 0%]
+    [% END %]
+[% END %]
+
+
+Med vänlig hälsning
+<<branches.branchname>>
+<<branches.branchphone>>
+<<branches.branchaddress2>>
+<<branches.branchaddress3>>
