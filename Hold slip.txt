@@ -1,0 +1,33 @@
+Hold slip
+
+<h1>Låntagarnummer: <<borrowers.borrowernumber>><h1>
+<h2>
+<br />
+Hämtas på:
+<br />
+ <<branches.branchname>>
+<br /></h2><br />
+<br />
+<br />
+<br />
+<br /><p><h5>Hämtas senast: [% USE KohaDates %]
+		[% hold.expirationdate | $KohaDates %]</h5></p>
+<br />
+<h3></ul>
+<br />
+Reservation
+<br />
+
+<<biblio.title>>
+<br />
+<<biblio.author>>
+<br />
+<br />
+Etikett
+<br />
+<<items.barcode>></h3>
+<ul>
+<br />
+<br />
+<br />
+</p>
